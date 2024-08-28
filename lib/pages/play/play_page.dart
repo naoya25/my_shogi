@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_shogi/components/preview_board.dart';
 import 'package:my_shogi/providers/board_provider.dart';
 
 class PlayPage extends ConsumerWidget {
@@ -16,38 +17,18 @@ class PlayPage extends ConsumerWidget {
       ),
       body: Center(
         child: boardAsyncValue.when(
-          data: (board) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: board.grid.map((row) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: row.map((piece) {
-                    return Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        color: piece == null
-                            ? Colors.white
-                            : piece.owner == '先手'
-                                ? Colors.lightGreen
-                                : Colors.lightBlue,
-                      ),
-                      child: piece == null
-                          ? null
-                          : Center(
-                              child: Text(
-                                piece.type.name,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ),
-                    );
-                  }).toList(),
-                );
-              }).toList(),
-            );
-          },
+          data: (board) => PreviewBoard(
+            board: board,
+            onTapTile: (i, j) {
+              final piece = board.grid[i][j];
+              if (piece == null) return;
+
+              print(i);
+              print(j);
+              print(piece.owner);
+              print(piece.moveOffsets());
+            },
+          ),
           loading: () => const CircularProgressIndicator(),
           error: (err, stack) => Text('Error: $err'),
         ),

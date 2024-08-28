@@ -118,9 +118,10 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ShogiPieceImpl with DiagnosticableTreeMixin implements _ShogiPiece {
+class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
   const _$ShogiPieceImpl(
-      {required this.type, required this.owner, required this.isPromoted});
+      {required this.type, required this.owner, required this.isPromoted})
+      : super._();
 
   factory _$ShogiPieceImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShogiPieceImplFromJson(json);
@@ -178,11 +179,12 @@ class _$ShogiPieceImpl with DiagnosticableTreeMixin implements _ShogiPiece {
   }
 }
 
-abstract class _ShogiPiece implements ShogiPiece {
+abstract class _ShogiPiece extends ShogiPiece {
   const factory _ShogiPiece(
       {required final ShogiPieceType type,
       required final String owner,
       required final bool isPromoted}) = _$ShogiPieceImpl;
+  const _ShogiPiece._() : super._();
 
   factory _ShogiPiece.fromJson(Map<String, dynamic> json) =
       _$ShogiPieceImpl.fromJson;
