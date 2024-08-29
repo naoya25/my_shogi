@@ -9,6 +9,7 @@ class PlayPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardAsyncValue = ref.watch(boardNotifierProvider);
+    final boardNotifier = ref.watch(boardNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -17,18 +18,26 @@ class PlayPage extends ConsumerWidget {
       ),
       body: Center(
         child: boardAsyncValue.when(
-          data: (board) => PreviewBoard(
-            board: board,
-            onTapTile: (i, j) {
-              final piece = board.grid[i][j];
-              if (piece == null) return;
+          data: (board) {
+            return PreviewBoard(
+              board: board,
+              onTapTile: (x, y) {
+                final piece = board.grid[y][x];
+                if (piece == null) return;
 
-              print(i);
-              print(j);
-              print(piece.owner);
-              print(piece.moveOffsets());
-            },
-          ),
+                // 選択された駒がある
+                if (board.selectedPositionX != null &&
+                    board.selectedPositionY != null &&
+                    board.currentPiece != null) {
+                  // クリックされたマスが移動範囲に含まれてたら、駒の移動
+                  // 範囲外ならresetする
+                  boardNotifier.resetSelection();
+                } else {
+                  boardNotifier.selectPiece(piece, x, y);
+                }
+              },
+            );
+          },
           loading: () => const CircularProgressIndicator(),
           error: (err, stack) => Text('Error: $err'),
         ),
