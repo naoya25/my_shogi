@@ -9,7 +9,7 @@ part 'board.g.dart';
 class Board with _$Board {
   const factory Board({
     required List<List<ShogiPiece?>> grid, // 盤面
-    required bool isPlayerTurn, // 先手番か後手番か
+    required String playerTurn, // 先手番か後手番か
     required bool isGameOver, // 詰んでいるか
     required List<ShogiPiece> player1CapturedPieces, // 先手の持ち駒
     required List<ShogiPiece> player2CapturedPieces, // 後手の持ち駒
@@ -101,7 +101,7 @@ class Board with _$Board {
               type: ShogiPieceType.lance, owner: "先手", isPromoted: false),
         ],
       ],
-      isPlayerTurn: true,
+      playerTurn: '先手',
       isGameOver: false,
       player1CapturedPieces: [],
       player2CapturedPieces: [],

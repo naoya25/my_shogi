@@ -24,6 +24,7 @@ class PlayPage extends ConsumerWidget {
               onTapTile: (x, y) {
                 final piece = board.grid[y][x];
                 if (piece == null) return;
+                if (piece.owner != board.playerTurn) return;
 
                 // 選択された駒がある
                 if (board.selectedPositionX != null &&

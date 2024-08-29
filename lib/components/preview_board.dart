@@ -20,15 +20,42 @@ class PreviewBoard extends StatelessWidget {
           board.currentPiece == null) {
         return false;
       }
-      int nx = board.selectedPositionX!; // 選択中の駒の位置
-      int ny = board.selectedPositionY!; // 選択中の駒の位置
-      // 選択中の駒の移動範囲
+
+      int nx = board.selectedPositionX!;
+      int ny = board.selectedPositionY!;
       List<Offset> moveOffsets = board.currentPiece!.moveOffsets();
 
       for (Offset offset in moveOffsets) {
         int targetX = nx + offset.dx.toInt();
-        int targetY = ny + offset.dy.toInt();
+        int targetY = board.playerTurn == '先手'
+            ? ny - offset.dy.toInt()
+            : ny + offset.dy.toInt();
+
         if (x == targetX && y == targetY) {
+          // 進行方向に駒があるかチェック
+          int stepX = (targetX - nx).sign;
+          int stepY = (targetY - ny).sign;
+
+          int checkX = nx + stepX;
+          int checkY = ny + stepY;
+
+          if (board.currentPiece?.type != ShogiPieceType.knight) {
+            while (checkX != targetX || checkY != targetY) {
+              // 途中に駒があれば false を返す
+              if (board.grid[checkY][checkX] != null) {
+                return false;
+              }
+              checkX += stepX;
+              checkY += stepY;
+            }
+          }
+
+          // 目標地点に味方の駒があれば false を返す
+          ShogiPiece? piece = board.grid[targetY][targetX];
+          if (piece != null && piece.owner == board.currentPiece!.owner) {
+            return false;
+          }
+
           return true;
         }
       }
@@ -39,6 +66,7 @@ class PreviewBoard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Text('手番: ${board.playerTurn}'),
         for (int y = 0; y < 9; y++)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

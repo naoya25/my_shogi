@@ -153,7 +153,17 @@ class ShogiPiece with _$ShogiPiece {
       ],
     };
 
-    if (type.name.startsWith('promoted')) {
+    if (type == ShogiPieceType.promotedRook) {
+      return [
+        ...offsetMap[ShogiPieceType.king]!,
+        ...offsetMap[ShogiPieceType.rook]!,
+      ];
+    } else if (type == ShogiPieceType.promotedBishop) {
+      return [
+        ...offsetMap[ShogiPieceType.king]!,
+        ...offsetMap[ShogiPieceType.bishop]!,
+      ];
+    } else if (type.name.startsWith('promoted')) {
       return offsetMap[ShogiPieceType.gold]!;
     } else {
       return offsetMap[type] ?? [];
