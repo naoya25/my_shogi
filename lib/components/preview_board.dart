@@ -29,7 +29,20 @@ class PreviewBoard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('手番: ${board.isPlayerTurn ? '先手' : '後手'}'),
+        Text(board.isPlayerTurn ? '先手' : '後手'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (ShogiPiece piece in board.player2CapturedPieces)
+              _Tile(
+                isCurrent: false,
+                inRange: false,
+                piece: piece,
+                onTapTile: null,
+              )._previewPiece(),
+          ],
+        ),
+        const SizedBox(height: 20),
         for (int y = 0; y < 9; y++)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,9 +54,22 @@ class PreviewBoard extends StatelessWidget {
                   inRange: isInRange(Position(x: x, y: y)),
                   piece: board.grid[y][x],
                   onTapTile: () => onTapTile!(Position(x: x, y: y)),
-                )
+                ),
             ],
-          )
+          ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (ShogiPiece piece in board.player1CapturedPieces)
+              _Tile(
+                isCurrent: false,
+                inRange: false,
+                piece: piece,
+                onTapTile: null,
+              )._previewPiece(),
+          ],
+        ),
       ],
     );
   }
@@ -73,21 +99,15 @@ class _Tile extends StatelessWidget {
           border: Border.all(),
           color: _getTileColor(isCurrent, inRange, piece),
         ),
-        child: Center(
-          child: Text(
-            piece != null ? piece!.type.name : '',
-            style: const TextStyle(fontSize: 12),
-          ),
-        ),
+        child: _previewPiece(),
       ),
     );
   }
 
   Color? _getTileColor(bool isCurrent, bool inRange, ShogiPiece? piece) {
-    // if (isCurrent) {
-    //   return Colors.red;
-    // } else
-    if (inRange) {
+    if (isCurrent) {
+      return Colors.red;
+    } else if (inRange) {
       return Colors.grey;
     } else if (piece == null) {
       return Colors.white;
@@ -98,5 +118,17 @@ class _Tile extends StatelessWidget {
     } else {
       return null;
     }
+  }
+
+  Widget _previewPiece() {
+    return Center(
+      child: Transform.rotate(
+        angle: piece == null || piece!.isOwner ? 0 : 3.14159,
+        child: Text(
+          piece != null ? piece!.type.name : '',
+          style: const TextStyle(fontSize: 12),
+        ),
+      ),
+    );
   }
 }

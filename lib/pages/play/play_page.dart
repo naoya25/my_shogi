@@ -24,18 +24,19 @@ class PlayPage extends ConsumerWidget {
               board: board,
               onTapTile: (Position position) {
                 final piece = board.grid[position.y][position.x];
-                if (piece == null) return;
-                if (piece.isOwner != board.isPlayerTurn) return;
-
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  // クリックされたマスが移動範囲に含まれてたら、駒の移動
-                  // 範囲外ならresetする
-                  boardNotifier.resetSelection();
-                } else {
-                  boardNotifier.selectPiece(piece, position);
+                  boardNotifier.movePiece(
+                    board.currentPiece!,
+                    board.selectedPosition!,
+                    position,
+                  );
                 }
+
+                if (piece == null) return;
+                if (piece.isOwner != board.isPlayerTurn) return;
+                boardNotifier.selectPiece(piece, position);
               },
             );
           },
