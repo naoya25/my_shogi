@@ -22,7 +22,8 @@ class BoardNotifier extends _$BoardNotifier {
     }
   }
 
-  void movePiece(ShogiPiece piece, Position before, Position after) {
+  void movePiece(
+      ShogiPiece piece, Position before, Position after, bool isPromote) {
     final currentBoard = state.value;
 
     if (currentBoard == null ||
@@ -30,6 +31,11 @@ class BoardNotifier extends _$BoardNotifier {
         !piece.canMove(before, after, currentBoard.grid)) {
       resetSelection();
       return;
+    }
+
+    // 成る
+    if (isPromote) {
+      piece = piece.copyWith(type: piece.getPromotedType()!);
     }
 
     // 移動先のマス

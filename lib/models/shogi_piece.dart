@@ -203,6 +203,32 @@ class ShogiPiece with _$ShogiPiece {
     int dy = isOwner ? -1 : 1;
     return (start.x == end.x && end.y == start.y + dy);
   }
+
+  ShogiPieceType? getPromotedType() {
+    switch (type) {
+      case ShogiPieceType.king:
+      case ShogiPieceType.gold:
+      case ShogiPieceType.promotedRook:
+      case ShogiPieceType.promotedBishop:
+      case ShogiPieceType.promotedSilver:
+      case ShogiPieceType.promotedKnight:
+      case ShogiPieceType.promotedLance:
+      case ShogiPieceType.promotedPawn:
+        return null;
+      case ShogiPieceType.rook:
+        return ShogiPieceType.promotedRook;
+      case ShogiPieceType.bishop:
+        return ShogiPieceType.promotedBishop;
+      case ShogiPieceType.silver:
+        return ShogiPieceType.promotedSilver;
+      case ShogiPieceType.knight:
+        return ShogiPieceType.promotedKnight;
+      case ShogiPieceType.lance:
+        return ShogiPieceType.promotedLance;
+      case ShogiPieceType.pawn:
+        return ShogiPieceType.promotedPawn;
+    }
+  }
 }
 
 @freezed

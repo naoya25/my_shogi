@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_shogi/components/preview_board.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:my_shogi/providers/board_provider.dart';
+import 'package:my_shogi/utils/confirm_dialog.dart';
 
 class PlayPage extends ConsumerWidget {
   const PlayPage({super.key});
@@ -27,11 +28,37 @@ class PlayPage extends ConsumerWidget {
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  boardNotifier.movePiece(
-                    board.currentPiece!,
-                    board.selectedPosition!,
-                    position,
-                  );
+                  if ((board.isPlayerTurn && position.y <= 2) ||
+                      (!board.isPlayerTurn && position.y >= 6) &&
+                          board.currentPiece?.getPromotedType() != null) {
+                    showConfirmDialog(
+                      context: context,
+                      message: '成りますか？',
+                      onYes: () {
+                        boardNotifier.movePiece(
+                          board.currentPiece!,
+                          board.selectedPosition!,
+                          position,
+                          true,
+                        );
+                      },
+                      onNo: () {
+                        boardNotifier.movePiece(
+                          board.currentPiece!,
+                          board.selectedPosition!,
+                          position,
+                          false,
+                        );
+                      },
+                    );
+                  } else {
+                    boardNotifier.movePiece(
+                      board.currentPiece!,
+                      board.selectedPosition!,
+                      position,
+                      false,
+                    );
+                  }
                 }
 
                 if (piece == null) return;
