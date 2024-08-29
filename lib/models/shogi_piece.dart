@@ -28,7 +28,7 @@ enum ShogiPieceType {
 class ShogiPiece with _$ShogiPiece {
   const ShogiPiece._();
   const factory ShogiPiece({
-    required ShogiPieceType type, 
+    required ShogiPieceType type,
     required bool isOwner, // 先手: true, 後手: false
   }) = _ShogiPiece;
 
@@ -36,6 +36,9 @@ class ShogiPiece with _$ShogiPiece {
       _$ShogiPieceFromJson(json);
 
   bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+    if (start == end) return false;
+    if (isOwner == board[end.y][end.x]?.isOwner) return false;
+
     switch (type) {
       case ShogiPieceType.king:
         return _kingMove(start, end, board);
@@ -73,7 +76,7 @@ class ShogiPiece with _$ShogiPiece {
       int minY = start.y < end.y ? start.y : end.y;
       int maxY = start.y > end.y ? start.y : end.y;
       for (int y = minY + 1; y < maxY; y++) {
-        if (board[start.x][y] != null) {
+        if (board[y][start.x] != null) {
           return false;
         }
       }
@@ -82,7 +85,7 @@ class ShogiPiece with _$ShogiPiece {
       int minX = start.x < end.x ? start.x : end.x;
       int maxX = start.x > end.x ? start.x : end.x;
       for (int x = minX + 1; x < maxX; x++) {
-        if (board[x][start.y] != null) {
+        if (board[start.y][x] != null) {
           return false;
         }
       }
@@ -91,16 +94,18 @@ class ShogiPiece with _$ShogiPiece {
     return false;
   }
 
-  // 斜めの動き（角行）
   bool diagonalMove(
-      Position start, Position end, List<List<ShogiPiece?>> board) {
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     if ((start.x - end.x).abs() == (start.y - end.y).abs()) {
       int xStep = start.x < end.x ? 1 : -1;
       int yStep = start.y < end.y ? 1 : -1;
       int x = start.x + xStep;
       int y = start.y + yStep;
       while (x != end.x && y != end.y) {
-        if (board[x][y] != null) {
+        if (board[y][x] != null) {
           return false;
         }
         x += xStep;
@@ -144,7 +149,11 @@ class ShogiPiece with _$ShogiPiece {
   ) {
     int dx = (start.x - end.x).abs();
     int dy = end.y - start.y;
-    return (dy.abs() <= 1 && dx <= 1) && (end.y >= start.y || dx == 0);
+    if (isOwner) {
+      return (dy.abs() <= 1 && dx <= 1) && (end.y <= start.y || dx == 0);
+    } else {
+      return (dy.abs() <= 1 && dx <= 1) && (end.y >= start.y || dx == 0);
+    }
   }
 
   bool _silverMove(
@@ -153,7 +162,7 @@ class ShogiPiece with _$ShogiPiece {
     List<List<ShogiPiece?>> board,
   ) {
     int dx = (start.x - end.x).abs();
-    int dy = end.y - start.y;
+    int dy = isOwner ? start.y - end.y : end.y - start.y;
 
     return (dx == 1 && dy == 1) || // 斜め前方
         (dx == 0 && dy == 1) || // 前方直進
@@ -166,8 +175,12 @@ class ShogiPiece with _$ShogiPiece {
     List<List<ShogiPiece?>> board,
   ) {
     int dx = end.x - start.x;
-    int dy = end.y - start.y;
-    return (dy == 2 && (dx == 1 || dx == -1)) && end.y > start.y;
+    int dy = isOwner ? start.y - end.y : end.y - start.y;
+    if (isOwner) {
+      return (dy == 2 && (dx == 1 || dx == -1)) && end.y < start.y;
+    } else {
+      return (dy == 2 && (dx == 1 || dx == -1)) && end.y > start.y;
+    }
   }
 
   bool _lanceMove(
@@ -175,7 +188,11 @@ class ShogiPiece with _$ShogiPiece {
     Position end,
     List<List<ShogiPiece?>> board,
   ) {
-    return linearMove(start, end, board) && end.y > start.y;
+    if (isOwner) {
+      return linearMove(start, end, board) && end.y < start.y;
+    } else {
+      return linearMove(start, end, board) && end.y > start.y;
+    }
   }
 
   bool _pawnMove(
@@ -183,7 +200,8 @@ class ShogiPiece with _$ShogiPiece {
     Position end,
     List<List<ShogiPiece?>> board,
   ) {
-    return (start.x == end.x && end.y == start.y + 1);
+    int dy = isOwner ? -1 : 1;
+    return (start.x == end.x && end.y == start.y + dy);
   }
 }
 

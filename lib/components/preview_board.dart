@@ -84,9 +84,10 @@ class _Tile extends StatelessWidget {
   }
 
   Color? _getTileColor(bool isCurrent, bool inRange, ShogiPiece? piece) {
-    if (isCurrent) {
-      return Colors.red;
-    } else if (inRange) {
+    // if (isCurrent) {
+    //   return Colors.red;
+    // } else
+    if (inRange) {
       return Colors.grey;
     } else if (piece == null) {
       return Colors.white;
