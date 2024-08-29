@@ -9,15 +9,13 @@ part of 'shogi_piece.dart';
 _$ShogiPieceImpl _$$ShogiPieceImplFromJson(Map<String, dynamic> json) =>
     _$ShogiPieceImpl(
       type: $enumDecode(_$ShogiPieceTypeEnumMap, json['type']),
-      owner: json['owner'] as String,
-      isPromoted: json['isPromoted'] as bool,
+      isOwner: json['isOwner'] as bool,
     );
 
 Map<String, dynamic> _$$ShogiPieceImplToJson(_$ShogiPieceImpl instance) =>
     <String, dynamic>{
       'type': _$ShogiPieceTypeEnumMap[instance.type]!,
-      'owner': instance.owner,
-      'isPromoted': instance.isPromoted,
+      'isOwner': instance.isOwner,
     };
 
 const _$ShogiPieceTypeEnumMap = {
@@ -36,3 +34,15 @@ const _$ShogiPieceTypeEnumMap = {
   ShogiPieceType.promotedLance: 'promotedLance',
   ShogiPieceType.promotedPawn: 'promotedPawn',
 };
+
+_$PositionImpl _$$PositionImplFromJson(Map<String, dynamic> json) =>
+    _$PositionImpl(
+      x: (json['x'] as num).toInt(),
+      y: (json['y'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$PositionImplToJson(_$PositionImpl instance) =>
+    <String, dynamic>{
+      'x': instance.x,
+      'y': instance.y,
+    };

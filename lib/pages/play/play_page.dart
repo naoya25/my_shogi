@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_shogi/components/preview_board.dart';
+import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:my_shogi/providers/board_provider.dart';
 
 class PlayPage extends ConsumerWidget {
@@ -21,20 +22,19 @@ class PlayPage extends ConsumerWidget {
           data: (board) {
             return PreviewBoard(
               board: board,
-              onTapTile: (x, y) {
-                final piece = board.grid[y][x];
+              onTapTile: (Position position) {
+                final piece = board.grid[position.y][position.x];
                 if (piece == null) return;
-                if (piece.owner != board.playerTurn) return;
+                if (piece.isOwner != board.isPlayerTurn) return;
 
                 // 選択された駒がある
-                if (board.selectedPositionX != null &&
-                    board.selectedPositionY != null &&
+                if (board.selectedPosition != null &&
                     board.currentPiece != null) {
                   // クリックされたマスが移動範囲に含まれてたら、駒の移動
                   // 範囲外ならresetする
                   boardNotifier.resetSelection();
                 } else {
-                  boardNotifier.selectPiece(piece, x, y);
+                  boardNotifier.selectPiece(piece, position);
                 }
               },
             );

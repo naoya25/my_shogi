@@ -20,16 +20,15 @@ Board _$BoardFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Board {
-  List<List<ShogiPiece?>> get grid => throw _privateConstructorUsedError; // 盤面
-  String get playerTurn => throw _privateConstructorUsedError; // 先手番か後手番か
+  List<List<ShogiPiece?>> get grid => throw _privateConstructorUsedError;
+  bool get isPlayerTurn => throw _privateConstructorUsedError;
   bool get isGameOver => throw _privateConstructorUsedError; // 詰んでいるか
   List<ShogiPiece> get player1CapturedPieces =>
       throw _privateConstructorUsedError; // 先手の持ち駒
   List<ShogiPiece> get player2CapturedPieces =>
       throw _privateConstructorUsedError; // 後手の持ち駒
-  ShogiPiece? get currentPiece => throw _privateConstructorUsedError; // 選択された駒
-  int? get selectedPositionX => throw _privateConstructorUsedError; // 選択された駒の位置
-  int? get selectedPositionY => throw _privateConstructorUsedError;
+  ShogiPiece? get currentPiece => throw _privateConstructorUsedError;
+  Position? get selectedPosition => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,15 +42,15 @@ abstract class $BoardCopyWith<$Res> {
   @useResult
   $Res call(
       {List<List<ShogiPiece?>> grid,
-      String playerTurn,
+      bool isPlayerTurn,
       bool isGameOver,
       List<ShogiPiece> player1CapturedPieces,
       List<ShogiPiece> player2CapturedPieces,
       ShogiPiece? currentPiece,
-      int? selectedPositionX,
-      int? selectedPositionY});
+      Position? selectedPosition});
 
   $ShogiPieceCopyWith<$Res>? get currentPiece;
+  $PositionCopyWith<$Res>? get selectedPosition;
 }
 
 /// @nodoc
@@ -68,23 +67,22 @@ class _$BoardCopyWithImpl<$Res, $Val extends Board>
   @override
   $Res call({
     Object? grid = null,
-    Object? playerTurn = null,
+    Object? isPlayerTurn = null,
     Object? isGameOver = null,
     Object? player1CapturedPieces = null,
     Object? player2CapturedPieces = null,
     Object? currentPiece = freezed,
-    Object? selectedPositionX = freezed,
-    Object? selectedPositionY = freezed,
+    Object? selectedPosition = freezed,
   }) {
     return _then(_value.copyWith(
       grid: null == grid
           ? _value.grid
           : grid // ignore: cast_nullable_to_non_nullable
               as List<List<ShogiPiece?>>,
-      playerTurn: null == playerTurn
-          ? _value.playerTurn
-          : playerTurn // ignore: cast_nullable_to_non_nullable
-              as String,
+      isPlayerTurn: null == isPlayerTurn
+          ? _value.isPlayerTurn
+          : isPlayerTurn // ignore: cast_nullable_to_non_nullable
+              as bool,
       isGameOver: null == isGameOver
           ? _value.isGameOver
           : isGameOver // ignore: cast_nullable_to_non_nullable
@@ -101,14 +99,10 @@ class _$BoardCopyWithImpl<$Res, $Val extends Board>
           ? _value.currentPiece
           : currentPiece // ignore: cast_nullable_to_non_nullable
               as ShogiPiece?,
-      selectedPositionX: freezed == selectedPositionX
-          ? _value.selectedPositionX
-          : selectedPositionX // ignore: cast_nullable_to_non_nullable
-              as int?,
-      selectedPositionY: freezed == selectedPositionY
-          ? _value.selectedPositionY
-          : selectedPositionY // ignore: cast_nullable_to_non_nullable
-              as int?,
+      selectedPosition: freezed == selectedPosition
+          ? _value.selectedPosition
+          : selectedPosition // ignore: cast_nullable_to_non_nullable
+              as Position?,
     ) as $Val);
   }
 
@@ -123,6 +117,18 @@ class _$BoardCopyWithImpl<$Res, $Val extends Board>
       return _then(_value.copyWith(currentPiece: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PositionCopyWith<$Res>? get selectedPosition {
+    if (_value.selectedPosition == null) {
+      return null;
+    }
+
+    return $PositionCopyWith<$Res>(_value.selectedPosition!, (value) {
+      return _then(_value.copyWith(selectedPosition: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -134,16 +140,17 @@ abstract class _$$BoardImplCopyWith<$Res> implements $BoardCopyWith<$Res> {
   @useResult
   $Res call(
       {List<List<ShogiPiece?>> grid,
-      String playerTurn,
+      bool isPlayerTurn,
       bool isGameOver,
       List<ShogiPiece> player1CapturedPieces,
       List<ShogiPiece> player2CapturedPieces,
       ShogiPiece? currentPiece,
-      int? selectedPositionX,
-      int? selectedPositionY});
+      Position? selectedPosition});
 
   @override
   $ShogiPieceCopyWith<$Res>? get currentPiece;
+  @override
+  $PositionCopyWith<$Res>? get selectedPosition;
 }
 
 /// @nodoc
@@ -158,23 +165,22 @@ class __$$BoardImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? grid = null,
-    Object? playerTurn = null,
+    Object? isPlayerTurn = null,
     Object? isGameOver = null,
     Object? player1CapturedPieces = null,
     Object? player2CapturedPieces = null,
     Object? currentPiece = freezed,
-    Object? selectedPositionX = freezed,
-    Object? selectedPositionY = freezed,
+    Object? selectedPosition = freezed,
   }) {
     return _then(_$BoardImpl(
       grid: null == grid
           ? _value._grid
           : grid // ignore: cast_nullable_to_non_nullable
               as List<List<ShogiPiece?>>,
-      playerTurn: null == playerTurn
-          ? _value.playerTurn
-          : playerTurn // ignore: cast_nullable_to_non_nullable
-              as String,
+      isPlayerTurn: null == isPlayerTurn
+          ? _value.isPlayerTurn
+          : isPlayerTurn // ignore: cast_nullable_to_non_nullable
+              as bool,
       isGameOver: null == isGameOver
           ? _value.isGameOver
           : isGameOver // ignore: cast_nullable_to_non_nullable
@@ -191,14 +197,10 @@ class __$$BoardImplCopyWithImpl<$Res>
           ? _value.currentPiece
           : currentPiece // ignore: cast_nullable_to_non_nullable
               as ShogiPiece?,
-      selectedPositionX: freezed == selectedPositionX
-          ? _value.selectedPositionX
-          : selectedPositionX // ignore: cast_nullable_to_non_nullable
-              as int?,
-      selectedPositionY: freezed == selectedPositionY
-          ? _value.selectedPositionY
-          : selectedPositionY // ignore: cast_nullable_to_non_nullable
-              as int?,
+      selectedPosition: freezed == selectedPosition
+          ? _value.selectedPosition
+          : selectedPosition // ignore: cast_nullable_to_non_nullable
+              as Position?,
     ));
   }
 }
@@ -208,13 +210,12 @@ class __$$BoardImplCopyWithImpl<$Res>
 class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
   const _$BoardImpl(
       {required final List<List<ShogiPiece?>> grid,
-      required this.playerTurn,
+      required this.isPlayerTurn,
       required this.isGameOver,
       required final List<ShogiPiece> player1CapturedPieces,
       required final List<ShogiPiece> player2CapturedPieces,
       this.currentPiece,
-      this.selectedPositionX,
-      this.selectedPositionY})
+      this.selectedPosition})
       : _grid = grid,
         _player1CapturedPieces = player1CapturedPieces,
         _player2CapturedPieces = player2CapturedPieces;
@@ -230,10 +231,8 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
     return EqualUnmodifiableListView(_grid);
   }
 
-// 盤面
   @override
-  final String playerTurn;
-// 先手番か後手番か
+  final bool isPlayerTurn;
   @override
   final bool isGameOver;
 // 詰んでいるか
@@ -261,16 +260,12 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
 // 後手の持ち駒
   @override
   final ShogiPiece? currentPiece;
-// 選択された駒
   @override
-  final int? selectedPositionX;
-// 選択された駒の位置
-  @override
-  final int? selectedPositionY;
+  final Position? selectedPosition;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Board(grid: $grid, playerTurn: $playerTurn, isGameOver: $isGameOver, player1CapturedPieces: $player1CapturedPieces, player2CapturedPieces: $player2CapturedPieces, currentPiece: $currentPiece, selectedPositionX: $selectedPositionX, selectedPositionY: $selectedPositionY)';
+    return 'Board(grid: $grid, isPlayerTurn: $isPlayerTurn, isGameOver: $isGameOver, player1CapturedPieces: $player1CapturedPieces, player2CapturedPieces: $player2CapturedPieces, currentPiece: $currentPiece, selectedPosition: $selectedPosition)';
   }
 
   @override
@@ -279,13 +274,12 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
     properties
       ..add(DiagnosticsProperty('type', 'Board'))
       ..add(DiagnosticsProperty('grid', grid))
-      ..add(DiagnosticsProperty('playerTurn', playerTurn))
+      ..add(DiagnosticsProperty('isPlayerTurn', isPlayerTurn))
       ..add(DiagnosticsProperty('isGameOver', isGameOver))
       ..add(DiagnosticsProperty('player1CapturedPieces', player1CapturedPieces))
       ..add(DiagnosticsProperty('player2CapturedPieces', player2CapturedPieces))
       ..add(DiagnosticsProperty('currentPiece', currentPiece))
-      ..add(DiagnosticsProperty('selectedPositionX', selectedPositionX))
-      ..add(DiagnosticsProperty('selectedPositionY', selectedPositionY));
+      ..add(DiagnosticsProperty('selectedPosition', selectedPosition));
   }
 
   @override
@@ -294,8 +288,8 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
         (other.runtimeType == runtimeType &&
             other is _$BoardImpl &&
             const DeepCollectionEquality().equals(other._grid, _grid) &&
-            (identical(other.playerTurn, playerTurn) ||
-                other.playerTurn == playerTurn) &&
+            (identical(other.isPlayerTurn, isPlayerTurn) ||
+                other.isPlayerTurn == isPlayerTurn) &&
             (identical(other.isGameOver, isGameOver) ||
                 other.isGameOver == isGameOver) &&
             const DeepCollectionEquality()
@@ -304,10 +298,8 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
                 .equals(other._player2CapturedPieces, _player2CapturedPieces) &&
             (identical(other.currentPiece, currentPiece) ||
                 other.currentPiece == currentPiece) &&
-            (identical(other.selectedPositionX, selectedPositionX) ||
-                other.selectedPositionX == selectedPositionX) &&
-            (identical(other.selectedPositionY, selectedPositionY) ||
-                other.selectedPositionY == selectedPositionY));
+            (identical(other.selectedPosition, selectedPosition) ||
+                other.selectedPosition == selectedPosition));
   }
 
   @JsonKey(ignore: true)
@@ -315,13 +307,12 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_grid),
-      playerTurn,
+      isPlayerTurn,
       isGameOver,
       const DeepCollectionEquality().hash(_player1CapturedPieces),
       const DeepCollectionEquality().hash(_player2CapturedPieces),
       currentPiece,
-      selectedPositionX,
-      selectedPositionY);
+      selectedPosition);
 
   @JsonKey(ignore: true)
   @override
@@ -340,21 +331,20 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
 abstract class _Board implements Board {
   const factory _Board(
       {required final List<List<ShogiPiece?>> grid,
-      required final String playerTurn,
+      required final bool isPlayerTurn,
       required final bool isGameOver,
       required final List<ShogiPiece> player1CapturedPieces,
       required final List<ShogiPiece> player2CapturedPieces,
       final ShogiPiece? currentPiece,
-      final int? selectedPositionX,
-      final int? selectedPositionY}) = _$BoardImpl;
+      final Position? selectedPosition}) = _$BoardImpl;
 
   factory _Board.fromJson(Map<String, dynamic> json) = _$BoardImpl.fromJson;
 
   @override
   List<List<ShogiPiece?>> get grid;
-  @override // 盤面
-  String get playerTurn;
-  @override // 先手番か後手番か
+  @override
+  bool get isPlayerTurn;
+  @override
   bool get isGameOver;
   @override // 詰んでいるか
   List<ShogiPiece> get player1CapturedPieces;
@@ -362,10 +352,8 @@ abstract class _Board implements Board {
   List<ShogiPiece> get player2CapturedPieces;
   @override // 後手の持ち駒
   ShogiPiece? get currentPiece;
-  @override // 選択された駒
-  int? get selectedPositionX;
-  @override // 選択された駒の位置
-  int? get selectedPositionY;
+  @override
+  Position? get selectedPosition;
   @override
   @JsonKey(ignore: true)
   _$$BoardImplCopyWith<_$BoardImpl> get copyWith =>

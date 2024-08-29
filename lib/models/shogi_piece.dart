@@ -4,27 +4,70 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'shogi_piece.freezed.dart';
 part 'shogi_piece.g.dart';
 
-abstract class ShogiPiece {
+enum ShogiPieceType {
+  king('王'),
+  rook('飛'),
+  bishop('角'),
+  gold('金'),
+  silver('銀'),
+  knight('桂'),
+  lance('香'),
+  pawn('歩'),
+  promotedRook('竜'),
+  promotedBishop('馬'),
+  promotedSilver('成銀'),
+  promotedKnight('成桂'),
+  promotedLance('成香'),
+  promotedPawn('と');
+
   final String name;
+  const ShogiPieceType(this.name);
+}
 
-  ShogiPiece(this.name);
+@freezed
+class ShogiPiece with _$ShogiPiece {
+  const ShogiPiece._();
+  const factory ShogiPiece({
+    required ShogiPieceType type, 
+    required bool isOwner, // 先手: true, 後手: false
+  }) = _ShogiPiece;
 
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board);
+  factory ShogiPiece.fromJson(Map<String, dynamic> json) =>
+      _$ShogiPieceFromJson(json);
 
-  // 共通の動き（王、金の動き）
-  bool kingMove(Position start, Position end) {
-    int dx = (start.x - end.x).abs();
-    int dy = (start.y - end.y).abs();
-    return dx <= 1 && dy <= 1;
+  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+    switch (type) {
+      case ShogiPieceType.king:
+        return _kingMove(start, end, board);
+      case ShogiPieceType.rook:
+        return _rookMove(start, end, board);
+      case ShogiPieceType.bishop:
+        return _bishopMove(start, end, board);
+      case ShogiPieceType.gold:
+        return _goldMove(start, end, board);
+      case ShogiPieceType.silver:
+        return _silverMove(start, end, board);
+      case ShogiPieceType.knight:
+        return _knightMove(start, end, board);
+      case ShogiPieceType.lance:
+        return _lanceMove(start, end, board);
+      case ShogiPieceType.pawn:
+        return _pawnMove(start, end, board);
+      case ShogiPieceType.promotedRook:
+        return _rookMove(start, end, board) || _kingMove(start, end, board);
+      case ShogiPieceType.promotedBishop:
+        return _bishopMove(start, end, board) || _kingMove(start, end, board);
+      case ShogiPieceType.promotedSilver:
+        return _goldMove(start, end, board);
+      case ShogiPieceType.promotedKnight:
+        return _goldMove(start, end, board);
+      case ShogiPieceType.promotedLance:
+        return _goldMove(start, end, board);
+      case ShogiPieceType.promotedPawn:
+        return _goldMove(start, end, board);
+    }
   }
 
-  bool goldMove(Position start, Position end) {
-    int dx = (start.x - end.x).abs();
-    int dy = end.y - start.y;
-    return (dy.abs() <= 1 && dx <= 1) && (end.y >= start.y || dx == 0);
-  }
-
-  // 直線の動き（飛車、香車）
   bool linearMove(Position start, Position end, List<List<ShogiPiece?>> board) {
     if (start.x == end.x) {
       int minY = start.y < end.y ? start.y : end.y;
@@ -49,7 +92,8 @@ abstract class ShogiPiece {
   }
 
   // 斜めの動き（角行）
-  bool diagonalMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool diagonalMove(
+      Position start, Position end, List<List<ShogiPiece?>> board) {
     if ((start.x - end.x).abs() == (start.y - end.y).abs()) {
       int xStep = start.x < end.x ? 1 : -1;
       int yStep = start.y < end.y ? 1 : -1;
@@ -66,144 +110,90 @@ abstract class ShogiPiece {
     }
     return false;
   }
-}
 
-class Position {
-  final int x;
-  final int y;
-
-  Position(this.x, this.y);
-}
-
-class King extends ShogiPiece {
-  King() : super("王");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return kingMove(start, end) && start != end;
+  bool _kingMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
+    int dx = (start.x - end.x).abs();
+    int dy = (start.y - end.y).abs();
+    return dx <= 1 && dy <= 1;
   }
-}
 
-class Rook extends ShogiPiece {
-  Rook() : super("飛車");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool _rookMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     return linearMove(start, end, board);
   }
-}
 
-class PromotedRook extends Rook {
-  PromotedRook() : super();
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return linearMove(start, end, board) || kingMove(start, end);
-  }
-}
-
-class Bishop extends ShogiPiece {
-  Bishop() : super("角");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool _bishopMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     return diagonalMove(start, end, board);
   }
-}
 
-class PromotedBishop extends Bishop {
-  PromotedBishop() : super();
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return diagonalMove(start, end, board) || kingMove(start, end);
-  }
-}
-
-class Knight extends ShogiPiece {
-  Knight() : super("桂");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    int dx = end.x - start.x;
+  bool _goldMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
+    int dx = (start.x - end.x).abs();
     int dy = end.y - start.y;
-    return (dy == 2 && (dx == 1 || dx == -1)) && end.y > start.y;
+    return (dy.abs() <= 1 && dx <= 1) && (end.y >= start.y || dx == 0);
   }
-}
 
-class GoldGeneral extends ShogiPiece {
-  GoldGeneral() : super("金");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return goldMove(start, end);
-  }
-}
-
-class SilverGeneral extends ShogiPiece {
-  SilverGeneral() : super("銀");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool _silverMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     int dx = (start.x - end.x).abs();
     int dy = end.y - start.y;
 
     return (dx == 1 && dy == 1) || // 斜め前方
-           (dx == 0 && dy == 1) || // 前方直進
-           (dx == 1 && dy == -1);  // 斜め後方
+        (dx == 0 && dy == 1) || // 前方直進
+        (dx == 1 && dy == -1); // 斜め後方
   }
-}
 
-class Lance extends ShogiPiece {
-  Lance() : super("香");
+  bool _knightMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
+    int dx = end.x - start.x;
+    int dy = end.y - start.y;
+    return (dy == 2 && (dx == 1 || dx == -1)) && end.y > start.y;
+  }
 
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool _lanceMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     return linearMove(start, end, board) && end.y > start.y;
   }
-}
 
-class Pawn extends ShogiPiece {
-  Pawn() : super("歩");
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool _pawnMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     return (start.x == end.x && end.y == start.y + 1);
   }
 }
 
-class PromotedPawn extends ShogiPiece {
-  PromotedPawn() : super('と');
+@freezed
+class Position with _$Position {
+  const factory Position({
+    required int x,
+    required int y,
+  }) = _Position;
 
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return goldMove(start, end);
-  }
-}
-
-class PromotedLance extends ShogiPiece {
-  PromotedLance() : super('成香');
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return goldMove(start, end);
-  }
-}
-
-class PromotedKnight extends ShogiPiece {
-  PromotedKnight() : super('成桂');
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return goldMove(start, end);
-  }
-}
-
-class PromotedSilverGeneral extends ShogiPiece {
-  PromotedSilverGeneral() : super('成銀');
-
-  @override
-  bool canMove(Position start, Position end, List<List<ShogiPiece?>> board) {
-    return goldMove(start, end);
-  }
+  factory Position.fromJson(Map<String, dynamic> json) =>
+      _$PositionFromJson(json);
 }

@@ -11,13 +11,12 @@ class BoardNotifier extends _$BoardNotifier {
     return Board.initialize();
   }
 
-  void selectPiece(ShogiPiece piece, int x, int y) {
+  void selectPiece(ShogiPiece piece, Position position) {
     final currentBoard = state.value;
     if (currentBoard != null) {
       final updatedBoard = currentBoard.copyWith(
         currentPiece: piece,
-        selectedPositionX: x,
-        selectedPositionY: y,
+        selectedPosition: position,
       );
       state = AsyncValue.data(updatedBoard);
     }
@@ -41,8 +40,7 @@ class BoardNotifier extends _$BoardNotifier {
     if (currentBoard != null) {
       final updatedBoard = currentBoard.copyWith(
         currentPiece: null,
-        selectedPositionX: null,
-        selectedPositionY: null,
+        selectedPosition: null,
       );
 
       state = AsyncValue.data(updatedBoard);

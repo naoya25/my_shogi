@@ -20,9 +20,8 @@ ShogiPiece _$ShogiPieceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ShogiPiece {
-  ShogiPieceType get type => throw _privateConstructorUsedError; // 駒の種類
-  String get owner => throw _privateConstructorUsedError; // 駒の持ち主 (先手か後手)
-  bool get isPromoted => throw _privateConstructorUsedError;
+  ShogiPieceType get type => throw _privateConstructorUsedError;
+  bool get isOwner => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +35,7 @@ abstract class $ShogiPieceCopyWith<$Res> {
           ShogiPiece value, $Res Function(ShogiPiece) then) =
       _$ShogiPieceCopyWithImpl<$Res, ShogiPiece>;
   @useResult
-  $Res call({ShogiPieceType type, String owner, bool isPromoted});
+  $Res call({ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -53,21 +52,16 @@ class _$ShogiPieceCopyWithImpl<$Res, $Val extends ShogiPiece>
   @override
   $Res call({
     Object? type = null,
-    Object? owner = null,
-    Object? isPromoted = null,
+    Object? isOwner = null,
   }) {
     return _then(_value.copyWith(
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as ShogiPieceType,
-      owner: null == owner
-          ? _value.owner
-          : owner // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPromoted: null == isPromoted
-          ? _value.isPromoted
-          : isPromoted // ignore: cast_nullable_to_non_nullable
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -81,7 +75,7 @@ abstract class _$$ShogiPieceImplCopyWith<$Res>
       __$$ShogiPieceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ShogiPieceType type, String owner, bool isPromoted});
+  $Res call({ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -96,21 +90,16 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? type = null,
-    Object? owner = null,
-    Object? isPromoted = null,
+    Object? isOwner = null,
   }) {
     return _then(_$ShogiPieceImpl(
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as ShogiPieceType,
-      owner: null == owner
-          ? _value.owner
-          : owner // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPromoted: null == isPromoted
-          ? _value.isPromoted
-          : isPromoted // ignore: cast_nullable_to_non_nullable
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -119,8 +108,7 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
-  const _$ShogiPieceImpl(
-      {required this.type, required this.owner, required this.isPromoted})
+  const _$ShogiPieceImpl({required this.type, required this.isOwner})
       : super._();
 
   factory _$ShogiPieceImpl.fromJson(Map<String, dynamic> json) =>
@@ -128,16 +116,12 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
 
   @override
   final ShogiPieceType type;
-// 駒の種類
   @override
-  final String owner;
-// 駒の持ち主 (先手か後手)
-  @override
-  final bool isPromoted;
+  final bool isOwner;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ShogiPiece(type: $type, owner: $owner, isPromoted: $isPromoted)';
+    return 'ShogiPiece(type: $type, isOwner: $isOwner)';
   }
 
   @override
@@ -146,8 +130,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
     properties
       ..add(DiagnosticsProperty('type', 'ShogiPiece'))
       ..add(DiagnosticsProperty('type', type))
-      ..add(DiagnosticsProperty('owner', owner))
-      ..add(DiagnosticsProperty('isPromoted', isPromoted));
+      ..add(DiagnosticsProperty('isOwner', isOwner));
   }
 
   @override
@@ -156,14 +139,12 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$ShogiPieceImpl &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.owner, owner) || other.owner == owner) &&
-            (identical(other.isPromoted, isPromoted) ||
-                other.isPromoted == isPromoted));
+            (identical(other.isOwner, isOwner) || other.isOwner == isOwner));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type, owner, isPromoted);
+  int get hashCode => Object.hash(runtimeType, type, isOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -182,8 +163,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
 abstract class _ShogiPiece extends ShogiPiece {
   const factory _ShogiPiece(
       {required final ShogiPieceType type,
-      required final String owner,
-      required final bool isPromoted}) = _$ShogiPieceImpl;
+      required final bool isOwner}) = _$ShogiPieceImpl;
   const _ShogiPiece._() : super._();
 
   factory _ShogiPiece.fromJson(Map<String, dynamic> json) =
@@ -191,12 +171,171 @@ abstract class _ShogiPiece extends ShogiPiece {
 
   @override
   ShogiPieceType get type;
-  @override // 駒の種類
-  String get owner;
-  @override // 駒の持ち主 (先手か後手)
-  bool get isPromoted;
+  @override
+  bool get isOwner;
   @override
   @JsonKey(ignore: true)
   _$$ShogiPieceImplCopyWith<_$ShogiPieceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Position _$PositionFromJson(Map<String, dynamic> json) {
+  return _Position.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Position {
+  int get x => throw _privateConstructorUsedError;
+  int get y => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PositionCopyWith<Position> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PositionCopyWith<$Res> {
+  factory $PositionCopyWith(Position value, $Res Function(Position) then) =
+      _$PositionCopyWithImpl<$Res, Position>;
+  @useResult
+  $Res call({int x, int y});
+}
+
+/// @nodoc
+class _$PositionCopyWithImpl<$Res, $Val extends Position>
+    implements $PositionCopyWith<$Res> {
+  _$PositionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? x = null,
+    Object? y = null,
+  }) {
+    return _then(_value.copyWith(
+      x: null == x
+          ? _value.x
+          : x // ignore: cast_nullable_to_non_nullable
+              as int,
+      y: null == y
+          ? _value.y
+          : y // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$PositionImplCopyWith<$Res>
+    implements $PositionCopyWith<$Res> {
+  factory _$$PositionImplCopyWith(
+          _$PositionImpl value, $Res Function(_$PositionImpl) then) =
+      __$$PositionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int x, int y});
+}
+
+/// @nodoc
+class __$$PositionImplCopyWithImpl<$Res>
+    extends _$PositionCopyWithImpl<$Res, _$PositionImpl>
+    implements _$$PositionImplCopyWith<$Res> {
+  __$$PositionImplCopyWithImpl(
+      _$PositionImpl _value, $Res Function(_$PositionImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? x = null,
+    Object? y = null,
+  }) {
+    return _then(_$PositionImpl(
+      x: null == x
+          ? _value.x
+          : x // ignore: cast_nullable_to_non_nullable
+              as int,
+      y: null == y
+          ? _value.y
+          : y // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PositionImpl with DiagnosticableTreeMixin implements _Position {
+  const _$PositionImpl({required this.x, required this.y});
+
+  factory _$PositionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PositionImplFromJson(json);
+
+  @override
+  final int x;
+  @override
+  final int y;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'Position(x: $x, y: $y)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'Position'))
+      ..add(DiagnosticsProperty('x', x))
+      ..add(DiagnosticsProperty('y', y));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PositionImpl &&
+            (identical(other.x, x) || other.x == x) &&
+            (identical(other.y, y) || other.y == y));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, x, y);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PositionImplCopyWith<_$PositionImpl> get copyWith =>
+      __$$PositionImplCopyWithImpl<_$PositionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PositionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Position implements Position {
+  const factory _Position({required final int x, required final int y}) =
+      _$PositionImpl;
+
+  factory _Position.fromJson(Map<String, dynamic> json) =
+      _$PositionImpl.fromJson;
+
+  @override
+  int get x;
+  @override
+  int get y;
+  @override
+  @JsonKey(ignore: true)
+  _$$PositionImplCopyWith<_$PositionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
