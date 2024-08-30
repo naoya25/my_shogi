@@ -72,7 +72,15 @@ class ShogiPiece with _$ShogiPiece {
     }
   }
 
-  bool linearMove(Position start, Position end, List<List<ShogiPiece?>> board) {
+  bool canPut(Position position, List<List<ShogiPiece?>> board) {
+    return false;
+  }
+
+  bool _linearMove(
+    Position start,
+    Position end,
+    List<List<ShogiPiece?>> board,
+  ) {
     if (start.x == end.x) {
       int minY = start.y < end.y ? start.y : end.y;
       int maxY = start.y > end.y ? start.y : end.y;
@@ -95,7 +103,7 @@ class ShogiPiece with _$ShogiPiece {
     return false;
   }
 
-  bool diagonalMove(
+  bool _diagonalMove(
     Position start,
     Position end,
     List<List<ShogiPiece?>> board,
@@ -132,7 +140,7 @@ class ShogiPiece with _$ShogiPiece {
     Position end,
     List<List<ShogiPiece?>> board,
   ) {
-    return linearMove(start, end, board);
+    return _linearMove(start, end, board);
   }
 
   bool _bishopMove(
@@ -140,7 +148,7 @@ class ShogiPiece with _$ShogiPiece {
     Position end,
     List<List<ShogiPiece?>> board,
   ) {
-    return diagonalMove(start, end, board);
+    return _diagonalMove(start, end, board);
   }
 
   bool _goldMove(
@@ -190,9 +198,9 @@ class ShogiPiece with _$ShogiPiece {
     List<List<ShogiPiece?>> board,
   ) {
     if (isOwner) {
-      return linearMove(start, end, board) && end.y < start.y;
+      return _linearMove(start, end, board) && end.y < start.y;
     } else {
-      return linearMove(start, end, board) && end.y > start.y;
+      return _linearMove(start, end, board) && end.y > start.y;
     }
   }
 
