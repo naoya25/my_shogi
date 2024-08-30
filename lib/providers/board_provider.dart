@@ -11,6 +11,10 @@ class BoardNotifier extends _$BoardNotifier {
     return Board.initialize();
   }
 
+  void resetBoard() {
+    state = AsyncValue.data(Board.initialize());
+  }
+
   void selectPiece(ShogiPiece piece, Position? position) {
     final currentBoard = state.value;
     if (currentBoard != null) {

@@ -22,7 +22,9 @@ class Board with _$Board {
 
   static Board initialize() {
     return Board(
-      grid: ConstantBoards.normalBoard,
+      grid: ConstantBoards.normalBoard
+          .map((row) => List<ShogiPiece?>.from(row))
+          .toList(),
       isPlayerTurn: true,
       winner: null,
       player1CapturedPieces: [],

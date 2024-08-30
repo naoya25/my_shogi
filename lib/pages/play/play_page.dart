@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_shogi/components/preview_board.dart';
+import 'package:my_shogi/models/board.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:my_shogi/providers/board_provider.dart';
 import 'package:my_shogi/utils/confirm_dialog.dart';
@@ -13,7 +14,21 @@ class PlayPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardAsyncValue = ref.watch(boardNotifierProvider);
-    final boardNotifier = ref.watch(boardNotifierProvider.notifier);
+    final boardNotifier = ref.read(boardNotifierProvider.notifier);
+
+    bool canPromote(Board board, Position position) {
+      if (board.currentPiece!.getPromotedType() == null) return false;
+      if ((board.isPlayerTurn && position.y <= 2) ||
+          (!board.isPlayerTurn && position.y >= 6)) {
+        return true;
+      }
+      if ((board.isPlayerTurn && board.selectedPosition!.y <= 2) ||
+          (!board.isPlayerTurn && board.selectedPosition!.y >= 6)) {
+        return true;
+      }
+
+      return false;
+    }
 
     ref.listen(boardNotifierProvider, (previous, next) {
       if (next.value != null && next.value!.winner != null) {
@@ -53,9 +68,7 @@ class PlayPage extends ConsumerWidget {
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  if (((board.isPlayerTurn && position.y <= 2) ||
-                          (!board.isPlayerTurn && position.y >= 6)) &&
-                      board.currentPiece!.getPromotedType() != null) {
+                  if (canPromote(board, position)) {
                     showConfirmDialog(
                       context: context,
                       message: '成りますか？',
