@@ -95,7 +95,7 @@ class BoardNotifier extends _$BoardNotifier {
 
     if (currentBoard == null ||
         currentBoard.isPlayerTurn != piece.isOwner ||
-        currentBoard.grid[position.y][position.x] != null) {
+        !piece.canPut(position, currentBoard.grid)) {
       resetSelection();
       return;
     }

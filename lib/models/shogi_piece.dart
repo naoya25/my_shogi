@@ -73,7 +73,57 @@ class ShogiPiece with _$ShogiPiece {
   }
 
   bool canPut(Position position, List<List<ShogiPiece?>> board) {
-    return false;
+    switch (type) {
+      case ShogiPieceType.king:
+      case ShogiPieceType.rook:
+      case ShogiPieceType.bishop:
+      case ShogiPieceType.gold:
+      case ShogiPieceType.silver:
+        if (board[position.y][position.x] == null) {
+          return true;
+        } else {
+          return false;
+        }
+      case ShogiPieceType.knight:
+        if (board[position.y][position.x] == null) {
+          if (isOwner && (position.y == 0 || position.y == 1)) return false;
+          if (!isOwner && (position.y == 7 || position.y == 8)) return false;
+          return true;
+        } else {
+          return false;
+        }
+      case ShogiPieceType.lance:
+        if (board[position.y][position.x] == null) {
+          if (isOwner && position.y == 0) return false;
+          if (!isOwner && position.y == 8) return false;
+          return true;
+        } else {
+          return false;
+        }
+      case ShogiPieceType.pawn:
+        if (board[position.y][position.x] == null) {
+          if (isOwner && position.y == 0) return false;
+          if (!isOwner && position.y == 8) return false;
+
+          for (int y = 0; y < 9; y++) {
+            if (board[y][position.x] != null &&
+                board[y][position.x]!.type == ShogiPieceType.pawn &&
+                board[y][position.x]!.isOwner == isOwner) {
+              return false;
+            }
+          }
+          return true;
+        } else {
+          return false;
+        }
+      case ShogiPieceType.promotedRook:
+      case ShogiPieceType.promotedBishop:
+      case ShogiPieceType.promotedSilver:
+      case ShogiPieceType.promotedKnight:
+      case ShogiPieceType.promotedLance:
+      case ShogiPieceType.promotedPawn:
+        return false;
+    }
   }
 
   bool _linearMove(
