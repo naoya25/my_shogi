@@ -20,6 +20,7 @@ ShogiPiece _$ShogiPieceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ShogiPiece {
+  String get id => throw _privateConstructorUsedError;
   ShogiPieceType get type => throw _privateConstructorUsedError;
   bool get isOwner => throw _privateConstructorUsedError;
 
@@ -35,7 +36,7 @@ abstract class $ShogiPieceCopyWith<$Res> {
           ShogiPiece value, $Res Function(ShogiPiece) then) =
       _$ShogiPieceCopyWithImpl<$Res, ShogiPiece>;
   @useResult
-  $Res call({ShogiPieceType type, bool isOwner});
+  $Res call({String id, ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -51,10 +52,15 @@ class _$ShogiPieceCopyWithImpl<$Res, $Val extends ShogiPiece>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? type = null,
     Object? isOwner = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -75,7 +81,7 @@ abstract class _$$ShogiPieceImplCopyWith<$Res>
       __$$ShogiPieceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ShogiPieceType type, bool isOwner});
+  $Res call({String id, ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -89,10 +95,15 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? type = null,
     Object? isOwner = null,
   }) {
     return _then(_$ShogiPieceImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -108,12 +119,15 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
-  const _$ShogiPieceImpl({required this.type, required this.isOwner})
+  const _$ShogiPieceImpl(
+      {required this.id, required this.type, required this.isOwner})
       : super._();
 
   factory _$ShogiPieceImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShogiPieceImplFromJson(json);
 
+  @override
+  final String id;
   @override
   final ShogiPieceType type;
   @override
@@ -121,7 +135,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ShogiPiece(type: $type, isOwner: $isOwner)';
+    return 'ShogiPiece(id: $id, type: $type, isOwner: $isOwner)';
   }
 
   @override
@@ -129,6 +143,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ShogiPiece'))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('type', type))
       ..add(DiagnosticsProperty('isOwner', isOwner));
   }
@@ -138,13 +153,14 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ShogiPieceImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.isOwner, isOwner) || other.isOwner == isOwner));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type, isOwner);
+  int get hashCode => Object.hash(runtimeType, id, type, isOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -162,13 +178,16 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
 
 abstract class _ShogiPiece extends ShogiPiece {
   const factory _ShogiPiece(
-      {required final ShogiPieceType type,
+      {required final String id,
+      required final ShogiPieceType type,
       required final bool isOwner}) = _$ShogiPieceImpl;
   const _ShogiPiece._() : super._();
 
   factory _ShogiPiece.fromJson(Map<String, dynamic> json) =
       _$ShogiPieceImpl.fromJson;
 
+  @override
+  String get id;
   @override
   ShogiPieceType get type;
   @override

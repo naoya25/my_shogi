@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
+import 'package:my_shogi/utils/constant_boards.dart';
 
 part 'board.freezed.dart';
 part 'board.g.dart';
@@ -21,63 +22,7 @@ class Board with _$Board {
 
   static Board initialize() {
     return Board(
-      grid: [
-        [
-          const ShogiPiece(type: ShogiPieceType.lance, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.knight, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.silver, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.gold, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.king, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.gold, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.silver, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.knight, isOwner: false),
-          const ShogiPiece(type: ShogiPieceType.lance, isOwner: false),
-        ],
-        [
-          null,
-          const ShogiPiece(type: ShogiPieceType.rook, isOwner: false),
-          null,
-          null,
-          null,
-          null,
-          null,
-          const ShogiPiece(type: ShogiPieceType.bishop, isOwner: false),
-          null
-        ],
-        List.generate(
-          9,
-          (_) => const ShogiPiece(type: ShogiPieceType.pawn, isOwner: false),
-        ),
-        List.generate(9, (_) => null),
-        List.generate(9, (_) => null),
-        List.generate(9, (_) => null),
-        List.generate(
-          9,
-          (_) => const ShogiPiece(type: ShogiPieceType.pawn, isOwner: true),
-        ),
-        [
-          null,
-          const ShogiPiece(type: ShogiPieceType.bishop, isOwner: true),
-          null,
-          null,
-          null,
-          null,
-          null,
-          const ShogiPiece(type: ShogiPieceType.rook, isOwner: true),
-          null
-        ],
-        [
-          const ShogiPiece(type: ShogiPieceType.lance, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.knight, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.silver, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.gold, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.king, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.gold, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.silver, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.knight, isOwner: true),
-          const ShogiPiece(type: ShogiPieceType.lance, isOwner: true),
-        ],
-      ],
+      grid: ConstantBoards.normalBoard,
       isPlayerTurn: true,
       isGameOver: false,
       player1CapturedPieces: [],

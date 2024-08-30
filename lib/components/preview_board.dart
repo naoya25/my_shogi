@@ -5,11 +5,13 @@ import 'package:my_shogi/models/shogi_piece.dart';
 class PreviewBoard extends StatelessWidget {
   final Board board;
   final void Function(Position position)? onTapTile;
+  final void Function(ShogiPiece piece)? onTapCapturedPiece;
 
   const PreviewBoard({
     super.key,
     required this.board,
     this.onTapTile,
+    this.onTapCapturedPiece,
   });
 
   @override
@@ -21,28 +23,40 @@ class PreviewBoard extends StatelessWidget {
           end,
           board.grid,
         );
+      } else if (board.currentPiece != null && board.selectedPosition == null) {
+        // 打ち駒(駒がなかったらどこでも打てる)
+        return board.grid[end.y][end.x] == null;
       } else {
         return false;
       }
     }
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(board.isPlayerTurn ? '先手' : '後手'),
+        Text(
+          board.isPlayerTurn ? '先手番' : '後手番',
+          style: const TextStyle(fontSize: 22),
+        ),
+        // 後手持ち駒
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             for (ShogiPiece piece in board.player2CapturedPieces)
               _Tile(
-                isCurrent: false,
+                isCurrent: piece.id == board.currentPiece?.id,
                 inRange: false,
                 piece: piece,
-                onTapTile: null,
+                onTapCapturedPiece: () {
+                  if (onTapCapturedPiece != null) {
+                    onTapCapturedPiece!(piece);
+                  }
+                },
               )._previewPiece(),
           ],
         ),
         const SizedBox(height: 20),
+        // 盤面
         for (int y = 0; y < 9; y++)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,20 +67,29 @@ class PreviewBoard extends StatelessWidget {
                       board.selectedPosition?.y == y,
                   inRange: isInRange(Position(x: x, y: y)),
                   piece: board.grid[y][x],
-                  onTapTile: () => onTapTile!(Position(x: x, y: y)),
+                  onTapTile: () {
+                    if (onTapTile != null) {
+                      onTapTile!(Position(x: x, y: y));
+                    }
+                  },
                 ),
             ],
           ),
         const SizedBox(height: 20),
+        // 先手持ち駒
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             for (ShogiPiece piece in board.player1CapturedPieces)
               _Tile(
-                isCurrent: false,
+                isCurrent: piece.id == board.currentPiece?.id,
                 inRange: false,
                 piece: piece,
-                onTapTile: null,
+                onTapCapturedPiece: () {
+                  if (onTapCapturedPiece != null) {
+                    onTapCapturedPiece!(piece);
+                  }
+                },
               )._previewPiece(),
           ],
         ),
@@ -80,12 +103,14 @@ class _Tile extends StatelessWidget {
   final bool inRange;
   final ShogiPiece? piece;
   final VoidCallback? onTapTile;
+  final VoidCallback? onTapCapturedPiece;
 
   const _Tile({
     required this.isCurrent,
     required this.inRange,
     required this.piece,
     this.onTapTile,
+    this.onTapCapturedPiece,
   });
 
   @override
@@ -121,12 +146,18 @@ class _Tile extends StatelessWidget {
   }
 
   Widget _previewPiece() {
-    return Center(
-      child: Transform.rotate(
-        angle: piece == null || piece!.isOwner ? 0 : 3.14159,
-        child: Text(
-          piece != null ? piece!.type.name : '',
-          style: const TextStyle(fontSize: 12),
+    return GestureDetector(
+      onTap: onTapCapturedPiece,
+      child: Center(
+        child: Transform.rotate(
+          angle: piece == null || piece!.isOwner ? 0 : 3.14159,
+          child: Text(
+            piece != null ? piece!.type.name : '',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isCurrent ? FontWeight.bold : null,
+            ),
+          ),
         ),
       ),
     );

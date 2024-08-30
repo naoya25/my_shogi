@@ -11,7 +11,7 @@ class BoardNotifier extends _$BoardNotifier {
     return Board.initialize();
   }
 
-  void selectPiece(ShogiPiece piece, Position position) {
+  void selectPiece(ShogiPiece piece, Position? position) {
     final currentBoard = state.value;
     if (currentBoard != null) {
       final updatedBoard = currentBoard.copyWith(
@@ -23,7 +23,11 @@ class BoardNotifier extends _$BoardNotifier {
   }
 
   void movePiece(
-      ShogiPiece piece, Position before, Position after, bool isPromote) {
+    ShogiPiece piece,
+    Position before,
+    Position after,
+    bool isPromote,
+  ) {
     final currentBoard = state.value;
 
     if (currentBoard == null ||
@@ -49,12 +53,61 @@ class BoardNotifier extends _$BoardNotifier {
       resetSelection();
       return;
     } else if (targetPiece != null && targetPiece.isOwner != piece.isOwner) {
-      capturedPieces.add(targetPiece.copyWith(isOwner: !targetPiece.isOwner));
+      final demotedPiece = targetPiece.getDemotedType();
+      if (demotedPiece == null) {
+        capturedPieces.add(targetPiece.copyWith(
+          isOwner: !targetPiece.isOwner,
+        ));
+      } else {
+        capturedPieces.add(targetPiece.copyWith(
+          type: demotedPiece,
+          isOwner: !targetPiece.isOwner,
+        ));
+      }
     }
 
+    // 駒の移動
     final newGrid = List<List<ShogiPiece?>>.from(currentBoard.grid);
     newGrid[before.y][before.x] = null;
     newGrid[after.y][after.x] = piece;
+
+    final updatedBoard = currentBoard.copyWith(
+      grid: newGrid,
+      isPlayerTurn: !currentBoard.isPlayerTurn,
+      player1CapturedPieces: currentBoard.isPlayerTurn
+          ? capturedPieces
+          : currentBoard.player1CapturedPieces,
+      player2CapturedPieces: currentBoard.isPlayerTurn
+          ? currentBoard.player2CapturedPieces
+          : capturedPieces,
+      currentPiece: null,
+      selectedPosition: null,
+    );
+
+    state = AsyncValue.data(updatedBoard);
+  }
+
+  void putPiece(
+    ShogiPiece piece,
+    Position position,
+  ) {
+    final currentBoard = state.value;
+
+    if (currentBoard == null ||
+        currentBoard.isPlayerTurn != piece.isOwner ||
+        currentBoard.grid[position.y][position.x] != null) {
+      resetSelection();
+      return;
+    }
+
+    // 手持ちから削除
+    List<ShogiPiece> capturedPieces = currentBoard.isPlayerTurn
+        ? List<ShogiPiece>.from(currentBoard.player1CapturedPieces)
+        : List<ShogiPiece>.from(currentBoard.player2CapturedPieces);
+    capturedPieces.remove(piece);
+
+    final newGrid = List<List<ShogiPiece?>>.from(currentBoard.grid);
+    newGrid[position.y][position.x] = piece;
 
     final updatedBoard = currentBoard.copyWith(
       grid: newGrid,

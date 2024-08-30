@@ -28,6 +28,7 @@ enum ShogiPieceType {
 class ShogiPiece with _$ShogiPiece {
   const ShogiPiece._();
   const factory ShogiPiece({
+    required String id,
     required ShogiPieceType type,
     required bool isOwner, // 先手: true, 後手: false
   }) = _ShogiPiece;
@@ -227,6 +228,32 @@ class ShogiPiece with _$ShogiPiece {
         return ShogiPieceType.promotedLance;
       case ShogiPieceType.pawn:
         return ShogiPieceType.promotedPawn;
+    }
+  }
+
+  ShogiPieceType? getDemotedType() {
+    switch (type) {
+      case ShogiPieceType.king:
+      case ShogiPieceType.gold:
+      case ShogiPieceType.rook:
+      case ShogiPieceType.bishop:
+      case ShogiPieceType.silver:
+      case ShogiPieceType.knight:
+      case ShogiPieceType.lance:
+      case ShogiPieceType.pawn:
+        return null;
+      case ShogiPieceType.promotedRook:
+        return ShogiPieceType.rook;
+      case ShogiPieceType.promotedBishop:
+        return ShogiPieceType.bishop;
+      case ShogiPieceType.promotedSilver:
+        return ShogiPieceType.silver;
+      case ShogiPieceType.promotedKnight:
+        return ShogiPieceType.knight;
+      case ShogiPieceType.promotedLance:
+        return ShogiPieceType.lance;
+      case ShogiPieceType.promotedPawn:
+        return ShogiPieceType.pawn;
     }
   }
 }

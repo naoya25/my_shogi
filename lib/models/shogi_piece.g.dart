@@ -8,12 +8,14 @@ part of 'shogi_piece.dart';
 
 _$ShogiPieceImpl _$$ShogiPieceImplFromJson(Map<String, dynamic> json) =>
     _$ShogiPieceImpl(
+      id: json['id'] as String,
       type: $enumDecode(_$ShogiPieceTypeEnumMap, json['type']),
       isOwner: json['isOwner'] as bool,
     );
 
 Map<String, dynamic> _$$ShogiPieceImplToJson(_$ShogiPieceImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'type': _$ShogiPieceTypeEnumMap[instance.type]!,
       'isOwner': instance.isOwner,
     };

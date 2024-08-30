@@ -28,9 +28,9 @@ class PlayPage extends ConsumerWidget {
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  if ((board.isPlayerTurn && position.y <= 2) ||
-                      (!board.isPlayerTurn && position.y >= 6) &&
-                          board.currentPiece?.getPromotedType() != null) {
+                  if (((board.isPlayerTurn && position.y <= 2) ||
+                          (!board.isPlayerTurn && position.y >= 6)) &&
+                      board.currentPiece!.getPromotedType() != null) {
                     showConfirmDialog(
                       context: context,
                       message: '成りますか？',
@@ -59,11 +59,21 @@ class PlayPage extends ConsumerWidget {
                       false,
                     );
                   }
+                } else if (board.selectedPosition == null &&
+                    board.currentPiece != null) {
+                  boardNotifier.putPiece(
+                    board.currentPiece!,
+                    position,
+                  );
                 }
 
                 if (piece == null) return;
                 if (piece.isOwner != board.isPlayerTurn) return;
                 boardNotifier.selectPiece(piece, position);
+              },
+              onTapCapturedPiece: (ShogiPiece piece) {
+                if (board.isPlayerTurn != piece.isOwner) return;
+                boardNotifier.selectPiece(piece, null);
               },
             );
           },
