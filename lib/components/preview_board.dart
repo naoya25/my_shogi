@@ -24,7 +24,6 @@ class PreviewBoard extends StatelessWidget {
           board.grid,
         );
       } else if (board.currentPiece != null && board.selectedPosition == null) {
-        // 打ち駒(駒がなかったらどこでも打てる)
         return board.currentPiece!.canPut(end, board.grid);
       } else {
         return false;

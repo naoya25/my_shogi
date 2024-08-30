@@ -21,6 +21,7 @@ ShogiPiece _$ShogiPieceFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ShogiPiece {
   String get id => throw _privateConstructorUsedError;
+  bool get isKing => throw _privateConstructorUsedError;
   ShogiPieceType get type => throw _privateConstructorUsedError;
   bool get isOwner => throw _privateConstructorUsedError;
 
@@ -36,7 +37,7 @@ abstract class $ShogiPieceCopyWith<$Res> {
           ShogiPiece value, $Res Function(ShogiPiece) then) =
       _$ShogiPieceCopyWithImpl<$Res, ShogiPiece>;
   @useResult
-  $Res call({String id, ShogiPieceType type, bool isOwner});
+  $Res call({String id, bool isKing, ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$ShogiPieceCopyWithImpl<$Res, $Val extends ShogiPiece>
   @override
   $Res call({
     Object? id = null,
+    Object? isKing = null,
     Object? type = null,
     Object? isOwner = null,
   }) {
@@ -61,6 +63,10 @@ class _$ShogiPieceCopyWithImpl<$Res, $Val extends ShogiPiece>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      isKing: null == isKing
+          ? _value.isKing
+          : isKing // ignore: cast_nullable_to_non_nullable
+              as bool,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -81,7 +87,7 @@ abstract class _$$ShogiPieceImplCopyWith<$Res>
       __$$ShogiPieceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, ShogiPieceType type, bool isOwner});
+  $Res call({String id, bool isKing, ShogiPieceType type, bool isOwner});
 }
 
 /// @nodoc
@@ -96,6 +102,7 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? isKing = null,
     Object? type = null,
     Object? isOwner = null,
   }) {
@@ -104,6 +111,10 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      isKing: null == isKing
+          ? _value.isKing
+          : isKing // ignore: cast_nullable_to_non_nullable
+              as bool,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -120,7 +131,10 @@ class __$$ShogiPieceImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
   const _$ShogiPieceImpl(
-      {required this.id, required this.type, required this.isOwner})
+      {required this.id,
+      required this.isKing,
+      required this.type,
+      required this.isOwner})
       : super._();
 
   factory _$ShogiPieceImpl.fromJson(Map<String, dynamic> json) =>
@@ -129,13 +143,15 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
   @override
   final String id;
   @override
+  final bool isKing;
+  @override
   final ShogiPieceType type;
   @override
   final bool isOwner;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ShogiPiece(id: $id, type: $type, isOwner: $isOwner)';
+    return 'ShogiPiece(id: $id, isKing: $isKing, type: $type, isOwner: $isOwner)';
   }
 
   @override
@@ -144,6 +160,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
     properties
       ..add(DiagnosticsProperty('type', 'ShogiPiece'))
       ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('isKing', isKing))
       ..add(DiagnosticsProperty('type', type))
       ..add(DiagnosticsProperty('isOwner', isOwner));
   }
@@ -154,13 +171,14 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$ShogiPieceImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.isKing, isKing) || other.isKing == isKing) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.isOwner, isOwner) || other.isOwner == isOwner));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, type, isOwner);
+  int get hashCode => Object.hash(runtimeType, id, isKing, type, isOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -179,6 +197,7 @@ class _$ShogiPieceImpl extends _ShogiPiece with DiagnosticableTreeMixin {
 abstract class _ShogiPiece extends ShogiPiece {
   const factory _ShogiPiece(
       {required final String id,
+      required final bool isKing,
       required final ShogiPieceType type,
       required final bool isOwner}) = _$ShogiPieceImpl;
   const _ShogiPiece._() : super._();
@@ -188,6 +207,8 @@ abstract class _ShogiPiece extends ShogiPiece {
 
   @override
   String get id;
+  @override
+  bool get isKing;
   @override
   ShogiPieceType get type;
   @override

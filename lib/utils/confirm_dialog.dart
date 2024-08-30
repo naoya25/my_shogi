@@ -16,15 +16,15 @@ void showConfirmDialog({
           CupertinoDialogAction(
             child: const Text('Yes'),
             onPressed: () {
-              onYes();
               Navigator.of(context).pop();
+              onYes();
             },
           ),
           CupertinoDialogAction(
             child: const Text('No'),
             onPressed: () {
-              onNo();
               Navigator.of(context).pop();
+              onNo();
             },
           ),
         ],

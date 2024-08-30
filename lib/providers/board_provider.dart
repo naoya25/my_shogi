@@ -73,6 +73,9 @@ class BoardNotifier extends _$BoardNotifier {
 
     final updatedBoard = currentBoard.copyWith(
       grid: newGrid,
+      winner: (targetPiece != null && targetPiece.isKing)
+          ? currentBoard.isPlayerTurn
+          : null,
       isPlayerTurn: !currentBoard.isPlayerTurn,
       player1CapturedPieces: currentBoard.isPlayerTurn
           ? capturedPieces

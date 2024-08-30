@@ -15,7 +15,7 @@ _$BoardImpl _$$BoardImplFromJson(Map<String, dynamic> json) => _$BoardImpl(
               .toList())
           .toList(),
       isPlayerTurn: json['isPlayerTurn'] as bool,
-      isGameOver: json['isGameOver'] as bool,
+      winner: json['winner'] as bool?,
       player1CapturedPieces: (json['player1CapturedPieces'] as List<dynamic>)
           .map((e) => ShogiPiece.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -34,7 +34,7 @@ Map<String, dynamic> _$$BoardImplToJson(_$BoardImpl instance) =>
     <String, dynamic>{
       'grid': instance.grid,
       'isPlayerTurn': instance.isPlayerTurn,
-      'isGameOver': instance.isGameOver,
+      'winner': instance.winner,
       'player1CapturedPieces': instance.player1CapturedPieces,
       'player2CapturedPieces': instance.player2CapturedPieces,
       'currentPiece': instance.currentPiece,

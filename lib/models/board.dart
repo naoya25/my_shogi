@@ -11,7 +11,7 @@ class Board with _$Board {
   const factory Board({
     required List<List<ShogiPiece?>> grid,
     required bool isPlayerTurn,
-    required bool isGameOver, // 詰んでいるか
+    required bool? winner, // 詰んでいるか
     required List<ShogiPiece> player1CapturedPieces, // 先手の持ち駒
     required List<ShogiPiece> player2CapturedPieces, // 後手の持ち駒
     ShogiPiece? currentPiece,
@@ -24,9 +24,32 @@ class Board with _$Board {
     return Board(
       grid: ConstantBoards.normalBoard,
       isPlayerTurn: true,
-      isGameOver: false,
+      winner: null,
       player1CapturedPieces: [],
       player2CapturedPieces: [],
     );
   }
 }
+
+
+// class ShogiMovement {
+//   final Board board;
+
+//   ShogiMovement(this.board);
+
+//   bool canMove(Position end) {
+//     if (board.currentPiece == null || board.selectedPosition == null) {
+//       return false;
+//     }
+
+//     return board.currentPiece!.canMove(board.selectedPosition!, end, board.grid);
+//   }
+
+//   bool canPut(Position position) {
+//     if (board.currentPiece == null) {
+//       return false;
+//     }
+
+//     return board.currentPiece!.canPut(position, board.grid, board.isPlayerTurn);
+//   }
+// }

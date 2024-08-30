@@ -29,6 +29,7 @@ class ShogiPiece with _$ShogiPiece {
   const ShogiPiece._();
   const factory ShogiPiece({
     required String id,
+    required bool isKing,
     required ShogiPieceType type,
     required bool isOwner, // 先手: true, 後手: false
   }) = _ShogiPiece;
