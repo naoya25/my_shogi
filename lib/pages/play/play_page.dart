@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_shogi/components/preview_board.dart';
 import 'package:my_shogi/models/board.dart';
+import 'package:my_shogi/models/position.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:my_shogi/providers/board_provider.dart';
 import 'package:my_shogi/utils/confirm_dialog.dart';
@@ -17,7 +18,7 @@ class PlayPage extends ConsumerWidget {
     final boardNotifier = ref.read(boardNotifierProvider.notifier);
 
     bool canPromote(Board board, Position position) {
-      if (board.currentPiece!.getPromotedType() == null) return false;
+      if (board.currentPiece!.getPromoted(true) == null) return false;
       if ((board.isPlayerTurn && position.y <= 2) ||
           (!board.isPlayerTurn && position.y >= 6)) {
         return true;
@@ -68,37 +69,21 @@ class PlayPage extends ConsumerWidget {
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  if (!board.currentPiece!
-                      .canMove(board.selectedPosition!, position, board.grid)) {
+                  if (!board.canMove(position)) {
                     boardNotifier.resetSelection();
                   } else if (canPromote(board, position)) {
                     showConfirmDialog(
                       context: context,
                       message: '成りますか？',
                       onYes: () {
-                        boardNotifier.movePiece(
-                          board.currentPiece!,
-                          board.selectedPosition!,
-                          position,
-                          true,
-                        );
+                        boardNotifier.movePiece(position, true);
                       },
                       onNo: () {
-                        boardNotifier.movePiece(
-                          board.currentPiece!,
-                          board.selectedPosition!,
-                          position,
-                          false,
-                        );
+                        boardNotifier.movePiece(position, false);
                       },
                     );
                   } else {
-                    boardNotifier.movePiece(
-                      board.currentPiece!,
-                      board.selectedPosition!,
-                      position,
-                      false,
-                    );
+                    boardNotifier.movePiece(position, false);
                   }
                 } else if (board.selectedPosition == null &&
                     board.currentPiece != null) {

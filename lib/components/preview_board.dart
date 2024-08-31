@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_shogi/models/board.dart';
+import 'package:my_shogi/models/position.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 
 class PreviewBoard extends StatelessWidget {
@@ -18,13 +19,9 @@ class PreviewBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isInRange(Position end) {
       if (board.currentPiece != null && board.selectedPosition != null) {
-        return board.currentPiece!.canMove(
-          board.selectedPosition!,
-          end,
-          board.grid,
-        );
+        return board.canMove(end);
       } else if (board.currentPiece != null && board.selectedPosition == null) {
-        return board.currentPiece!.canPut(end, board.grid);
+        return board.canPut(end);
       } else {
         return false;
       }
@@ -151,7 +148,7 @@ class _Tile extends StatelessWidget {
         child: Transform.rotate(
           angle: piece == null || piece!.isOwner ? 0 : 3.14159,
           child: Text(
-            piece != null ? piece!.type.name : '',
+            piece != null ? piece!.name : '',
             style: TextStyle(
               fontSize: 12,
               fontWeight: isCurrent ? FontWeight.bold : null,

@@ -44,6 +44,7 @@ abstract class $BoardCopyWith<$Res> {
       ShogiPiece? currentPiece,
       Position? selectedPosition});
 
+  $ShogiPieceCopyWith<$Res>? get currentPiece;
   $PositionCopyWith<$Res>? get selectedPosition;
 }
 
@@ -102,6 +103,18 @@ class _$BoardCopyWithImpl<$Res, $Val extends Board>
 
   @override
   @pragma('vm:prefer-inline')
+  $ShogiPieceCopyWith<$Res>? get currentPiece {
+    if (_value.currentPiece == null) {
+      return null;
+    }
+
+    return $ShogiPieceCopyWith<$Res>(_value.currentPiece!, (value) {
+      return _then(_value.copyWith(currentPiece: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $PositionCopyWith<$Res>? get selectedPosition {
     if (_value.selectedPosition == null) {
       return null;
@@ -129,6 +142,8 @@ abstract class _$$BoardImplCopyWith<$Res> implements $BoardCopyWith<$Res> {
       ShogiPiece? currentPiece,
       Position? selectedPosition});
 
+  @override
+  $ShogiPieceCopyWith<$Res>? get currentPiece;
   @override
   $PositionCopyWith<$Res>? get selectedPosition;
 }
