@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_shogi/models/position.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:my_shogi/utils/constant_boards.dart';
 
 part 'board.freezed.dart';
-part 'board.g.dart';
 
 @freezed
 class Board with _$Board {
+  const Board._();
   const factory Board({
     required List<List<ShogiPiece?>> grid,
     required bool isPlayerTurn,
@@ -18,7 +19,6 @@ class Board with _$Board {
     Position? selectedPosition,
   }) = _Board;
 
-  factory Board.fromJson(Map<String, dynamic> json) => _$BoardFromJson(json);
 
   static Board initialize() {
     return Board(
@@ -31,27 +31,20 @@ class Board with _$Board {
       player2CapturedPieces: [],
     );
   }
+
+  bool canMove(Position to) {
+    if (currentPiece == null || selectedPosition == null) {
+      return false;
+    } else {
+      return currentPiece!.canMove(selectedPosition!, to, grid);
+    }
+  }
+
+  bool canPut(Position to) {
+    if (currentPiece == null) {
+      return false;
+    } else {
+      return currentPiece!.canPut(to, grid);
+    }
+  }
 }
-
-
-// class ShogiMovement {
-//   final Board board;
-
-//   ShogiMovement(this.board);
-
-//   bool canMove(Position end) {
-//     if (board.currentPiece == null || board.selectedPosition == null) {
-//       return false;
-//     }
-
-//     return board.currentPiece!.canMove(board.selectedPosition!, end, board.grid);
-//   }
-
-//   bool canPut(Position position) {
-//     if (board.currentPiece == null) {
-//       return false;
-//     }
-
-//     return board.currentPiece!.canPut(position, board.grid, board.isPlayerTurn);
-//   }
-// }

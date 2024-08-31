@@ -1,8 +1,44 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_shogi/models/position.dart';
+import 'package:my_shogi/utils/piece_movement.dart';
 
 part 'shogi_piece.freezed.dart';
-part 'shogi_piece.g.dart';
+
+abstract class ShogiPiece {
+  final String id;
+  final String name;
+
+  ShogiPiece(this.id, this.name);
+
+  bool canMove(Position start, Position end, List<List<ShogiPiece?>> grid);
+  bool canPut(Position position, List<List<ShogiPiece?>> grid);
+}
+
+@freezed
+class Gold with _$Gold implements ShogiPiece {
+  const Gold._();
+
+  factory Gold({
+    required String id,
+    required bool isKing,
+    required bool isOwner,
+  }) = _Gold;
+
+  @override
+  String get name => '金';
+
+  @override
+  bool canMove(Position start, Position end, List<List<ShogiPiece?>> grid) {
+    return PieceMovement.goldMove(start, end, grid, isOwner);
+  }
+
+  @override
+  bool canPut(Position position, List<List<ShogiPiece?>> grid) {
+    return PieceMovement.canPutBase(grid, position);
+  }
+}
+
+/*
 
 enum ShogiPieceType {
   king('王'),
@@ -327,3 +363,4 @@ class Position with _$Position {
   factory Position.fromJson(Map<String, dynamic> json) =>
       _$PositionFromJson(json);
 }
+*/

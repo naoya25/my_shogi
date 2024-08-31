@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Board _$BoardFromJson(Map<String, dynamic> json) {
-  return _Board.fromJson(json);
-}
-
 /// @nodoc
 mixin _$Board {
   List<List<ShogiPiece?>> get grid => throw _privateConstructorUsedError;
@@ -30,7 +26,6 @@ mixin _$Board {
   ShogiPiece? get currentPiece => throw _privateConstructorUsedError;
   Position? get selectedPosition => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BoardCopyWith<Board> get copyWith => throw _privateConstructorUsedError;
 }
@@ -49,7 +44,6 @@ abstract class $BoardCopyWith<$Res> {
       ShogiPiece? currentPiece,
       Position? selectedPosition});
 
-  $ShogiPieceCopyWith<$Res>? get currentPiece;
   $PositionCopyWith<$Res>? get selectedPosition;
 }
 
@@ -108,18 +102,6 @@ class _$BoardCopyWithImpl<$Res, $Val extends Board>
 
   @override
   @pragma('vm:prefer-inline')
-  $ShogiPieceCopyWith<$Res>? get currentPiece {
-    if (_value.currentPiece == null) {
-      return null;
-    }
-
-    return $ShogiPieceCopyWith<$Res>(_value.currentPiece!, (value) {
-      return _then(_value.copyWith(currentPiece: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
   $PositionCopyWith<$Res>? get selectedPosition {
     if (_value.selectedPosition == null) {
       return null;
@@ -147,8 +129,6 @@ abstract class _$$BoardImplCopyWith<$Res> implements $BoardCopyWith<$Res> {
       ShogiPiece? currentPiece,
       Position? selectedPosition});
 
-  @override
-  $ShogiPieceCopyWith<$Res>? get currentPiece;
   @override
   $PositionCopyWith<$Res>? get selectedPosition;
 }
@@ -206,8 +186,8 @@ class __$$BoardImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
+
+class _$BoardImpl extends _Board with DiagnosticableTreeMixin {
   const _$BoardImpl(
       {required final List<List<ShogiPiece?>> grid,
       required this.isPlayerTurn,
@@ -218,10 +198,8 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
       this.selectedPosition})
       : _grid = grid,
         _player1CapturedPieces = player1CapturedPieces,
-        _player2CapturedPieces = player2CapturedPieces;
-
-  factory _$BoardImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BoardImplFromJson(json);
+        _player2CapturedPieces = player2CapturedPieces,
+        super._();
 
   final List<List<ShogiPiece?>> _grid;
   @override
@@ -301,7 +279,6 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
                 other.selectedPosition == selectedPosition));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -318,16 +295,9 @@ class _$BoardImpl with DiagnosticableTreeMixin implements _Board {
   @pragma('vm:prefer-inline')
   _$$BoardImplCopyWith<_$BoardImpl> get copyWith =>
       __$$BoardImplCopyWithImpl<_$BoardImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BoardImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _Board implements Board {
+abstract class _Board extends Board {
   const factory _Board(
       {required final List<List<ShogiPiece?>> grid,
       required final bool isPlayerTurn,
@@ -336,8 +306,7 @@ abstract class _Board implements Board {
       required final List<ShogiPiece> player2CapturedPieces,
       final ShogiPiece? currentPiece,
       final Position? selectedPosition}) = _$BoardImpl;
-
-  factory _Board.fromJson(Map<String, dynamic> json) = _$BoardImpl.fromJson;
+  const _Board._() : super._();
 
   @override
   List<List<ShogiPiece?>> get grid;

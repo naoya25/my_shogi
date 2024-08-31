@@ -1,4 +1,5 @@
 import 'package:my_shogi/models/board.dart';
+import 'package:my_shogi/models/position.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
