@@ -68,7 +68,10 @@ class PlayPage extends ConsumerWidget {
                 // 選択された駒がある
                 if (board.selectedPosition != null &&
                     board.currentPiece != null) {
-                  if (canPromote(board, position)) {
+                  if (!board.currentPiece!
+                      .canMove(board.selectedPosition!, position, board.grid)) {
+                    boardNotifier.resetSelection();
+                  } else if (canPromote(board, position)) {
                     showConfirmDialog(
                       context: context,
                       message: '成りますか？',
@@ -103,11 +106,11 @@ class PlayPage extends ConsumerWidget {
                     board.currentPiece!,
                     position,
                   );
+                } else {
+                  if (piece == null) return;
+                  if (piece.isOwner != board.isPlayerTurn) return;
+                  boardNotifier.selectPiece(piece, position);
                 }
-
-                if (piece == null) return;
-                if (piece.isOwner != board.isPlayerTurn) return;
-                boardNotifier.selectPiece(piece, position);
               },
               onTapCapturedPiece: (ShogiPiece piece) {
                 if (board.isPlayerTurn != piece.isOwner) return;
