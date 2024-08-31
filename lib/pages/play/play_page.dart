@@ -18,7 +18,7 @@ class PlayPage extends ConsumerWidget {
     final boardNotifier = ref.read(boardNotifierProvider.notifier);
 
     bool canPromote(Board board, Position position) {
-      if (board.currentPiece!.getPromoted(true) == null) return false;
+      if (board.currentPiece!.promotePiece() == null) return false;
       if ((board.isPlayerTurn && position.y <= 2) ||
           (!board.isPlayerTurn && position.y >= 6)) {
         return true;

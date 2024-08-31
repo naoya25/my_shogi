@@ -38,7 +38,7 @@ class PreviewBoard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (ShogiPiece piece in board.player2CapturedPieces)
+            for (ShogiPiece piece in board.pieces2.pieces)
               _Tile(
                 isCurrent: piece.id == board.currentPiece?.id,
                 inRange: false,
@@ -76,7 +76,7 @@ class PreviewBoard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (ShogiPiece piece in board.player1CapturedPieces)
+            for (ShogiPiece piece in board.pieces1.pieces)
               _Tile(
                 isCurrent: piece.id == board.currentPiece?.id,
                 inRange: false,

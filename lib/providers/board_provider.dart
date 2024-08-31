@@ -1,4 +1,5 @@
 import 'package:my_shogi/models/board.dart';
+import 'package:my_shogi/models/captured_pieces.dart';
 import 'package:my_shogi/models/position.dart';
 import 'package:my_shogi/models/shogi_piece.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -36,28 +37,34 @@ class BoardNotifier extends _$BoardNotifier {
     }
 
     // 成り処理
-    final movingPiece = isPromote
-        ? currentBoard.currentPiece!.getPromoted(currentBoard.isPlayerTurn)!
+    final promotedPiece = currentBoard.currentPiece!.promotePiece();
+    final movingPiece = isPromote && promotedPiece != null
+        ? promotedPiece
         : currentBoard.currentPiece!;
 
     // 移動先のマス
     final targetPiece = currentBoard.grid[to.y][to.x];
-
-    List<ShogiPiece> capturedPieces = currentBoard.isPlayerTurn
-        ? List<ShogiPiece>.from(currentBoard.player1CapturedPieces)
-        : List<ShogiPiece>.from(currentBoard.player2CapturedPieces);
-
+    CapturedPieces newPieces =
+        currentBoard.isPlayerTurn ? currentBoard.pieces1 : currentBoard.pieces2;
     if (targetPiece != null &&
         targetPiece.isOwner == currentBoard.currentPiece!.isOwner) {
       resetSelection();
       return;
     } else if (targetPiece != null &&
         targetPiece.isOwner != currentBoard.currentPiece!.isOwner) {
-      final demotedPiece = targetPiece.getDemoted(currentBoard.isPlayerTurn);
-      capturedPieces.add(
-        demotedPiece ??
-            targetPiece.copyWith(isOwner: currentBoard.isPlayerTurn),
-      );
+      if (currentBoard.isPlayerTurn) {
+        if (targetPiece.isPromoted) {
+          newPieces = currentBoard.pieces1.add(targetPiece);
+        } else {
+          newPieces = currentBoard.pieces1.add(targetPiece);
+        }
+      } else {
+        if (targetPiece.isPromoted) {
+          newPieces = currentBoard.pieces2.add(targetPiece);
+        } else {
+          newPieces = currentBoard.pieces2.add(targetPiece);
+        }
+      }
     }
 
     // 駒の移動
@@ -72,12 +79,8 @@ class BoardNotifier extends _$BoardNotifier {
           ? currentBoard.isPlayerTurn
           : null,
       isPlayerTurn: !currentBoard.isPlayerTurn,
-      player1CapturedPieces: currentBoard.isPlayerTurn
-          ? capturedPieces
-          : currentBoard.player1CapturedPieces,
-      player2CapturedPieces: currentBoard.isPlayerTurn
-          ? currentBoard.player2CapturedPieces
-          : capturedPieces,
+      pieces1: currentBoard.isPlayerTurn ? newPieces : currentBoard.pieces1,
+      pieces2: currentBoard.isPlayerTurn ? currentBoard.pieces2 : newPieces,
       currentPiece: null,
       selectedPosition: null,
     );
@@ -98,24 +101,19 @@ class BoardNotifier extends _$BoardNotifier {
       return;
     }
 
-    // 手持ちから削除
-    List<ShogiPiece> capturedPieces = currentBoard.isPlayerTurn
-        ? List<ShogiPiece>.from(currentBoard.player1CapturedPieces)
-        : List<ShogiPiece>.from(currentBoard.player2CapturedPieces);
-    capturedPieces.remove(piece);
-
+    // 盤面に追加
     final newGrid = List<List<ShogiPiece?>>.from(currentBoard.grid);
     newGrid[position.y][position.x] = piece;
 
     final updatedBoard = currentBoard.copyWith(
       grid: newGrid,
       isPlayerTurn: !currentBoard.isPlayerTurn,
-      player1CapturedPieces: currentBoard.isPlayerTurn
-          ? capturedPieces
-          : currentBoard.player1CapturedPieces,
-      player2CapturedPieces: currentBoard.isPlayerTurn
-          ? currentBoard.player2CapturedPieces
-          : capturedPieces,
+      pieces1: currentBoard.isPlayerTurn
+          ? currentBoard.pieces1.pop(piece)
+          : currentBoard.pieces1,
+      pieces2: currentBoard.isPlayerTurn
+          ? currentBoard.pieces2
+          : currentBoard.pieces2.pop(piece),
       currentPiece: null,
       selectedPosition: null,
     );
